@@ -2,7 +2,6 @@ const fs = require('fs');
 const path = require('path');
 
 module.exports = function (config) {
-  console.log('config', config);
   const projectRoots = [process.cwd()];
   const extraConfig = [];
 

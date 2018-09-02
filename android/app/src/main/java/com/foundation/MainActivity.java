@@ -1,6 +1,11 @@
 package com.foundation;
 
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import com.facebook.react.ReactActivity;
+import com.facebook.react.ReactRootView;
 
 public class MainActivity extends ReactActivity {
 

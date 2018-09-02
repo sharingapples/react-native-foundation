@@ -5,6 +5,7 @@ const fs = require('fs');
 const path = require('path');
 
 const execRN = require('./_execRN');
+const validateConfig = require('./_validateConfig');
 
 const start = require('./start');
 const runIos = require('./run-ios');
@@ -19,7 +20,12 @@ const commands = {
 const config = {
   // Use the react-native folder from the foundation library by default
   REACT_NATIVE_DIR: path.resolve(__dirname, '..'),
+
+  // The workspace folder, if available
   WORKSPACE: null,
+
+  // The app folder to check for native dependencies
+  APP_FOLDER: null,
 };
 
 // The react-native command is available as 3rd argument
@@ -35,10 +41,20 @@ if (!commands[cmd]) {
     process.exit(1);
   }
 
+  // get the package.json file if it exists
+  const packageFile = path.resolve('package.json');
+  const package = fs.existsSync(packageFile) ? JSON.parse(fs.readFileSync(packageFile)) : {};
+
+  // the current folder from where the foundation is being executed
+  let currentFolder = path.resolve('.');
+
+  // if the package has dependencies, need to check if they are native, so mark the folder
+  if (package.dependencies) {
+    config.APP_FOLDER = path.resolve('.');
+  }
   // Search for a workspace if there is one and use it as a root folder
   // otherwise consider the first folder to contain package.json as the
   // root folder
-  let currentFolder = path.resolve('.');
   let workspaceFolder = null;
   do {
     const pkgFile = path.resolve(currentFolder, 'package.json');
@@ -100,10 +116,13 @@ if (!commands[cmd]) {
 
   // Looks like the app has some configuration to share
   if (fs.existsSync('foundation.config.js')) {
-    // TODO: Use the configuration
+    Object.assign(config, validateConfig(package));
   }
 
-  const args = commands[cmd](config);
-  const finalArgs = [cmd].concat(remaining).concat(args);
-  execRN(config.REACT_NATIVE_DIR, finalArgs);
+  Promise.resolve(commands[cmd](config, package)).catch((err) => {
+    console.error(err);
+  }).then((args) => {
+    const finalArgs = [cmd].concat(remaining).concat(args);
+    execRN(config.REACT_NATIVE_DIR, finalArgs);
+  });
 }

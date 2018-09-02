@@ -72,11 +72,14 @@ import com.android.build.OutputFile
  * ]
  */
 
+def manifestJson = new groovy.json.JsonSlurper().parseText(file('../../build/manifest.json').text);
+
 project.ext.react = [
     entryFile: "index.js"
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
+
 
 /**
  * Set this to true to create two separate APKs instead of one:
@@ -98,11 +101,12 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        applicationId "com.foundation"
+        resValue "string", "app_name", manifestJson.appName
+        applicationId manifestJson.bundleId
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode manifestJson.build
+        versionName manifestJson.version
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
