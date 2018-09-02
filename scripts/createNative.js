@@ -6,7 +6,7 @@ const rimraf = require('rimraf');
 
 const recursiveCopy = require('./_recursiveCopy');
 
-module.exports = function (config) {
+module.exports = async function (config) {
   if (!config.WORKSPACE) {
     throw new Error('Make sure you have a valid workspace for including native-modules');
   }
