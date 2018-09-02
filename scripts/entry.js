@@ -7,6 +7,7 @@ const path = require('path');
 const execRN = require('./_execRN');
 const validateConfig = require('./_validateConfig');
 
+const info = require('./info');
 const create = require('./create');
 const createNative = require('./createNative');
 const start = require('./start');
@@ -16,6 +17,7 @@ const reactPkg = require('react/package.json');
 const reactNativePkg = require('react-native/package.json');
 
 const commands = {
+  info,
   create,
   'create-native': createNative,
   start,
