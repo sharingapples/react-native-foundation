@@ -93,13 +93,14 @@ if (!commands[cmd]) {
         console.error(err);
         break;
       }
-    }
 
-    // Consider the first folder to have package.json as the root folder
-    // Unless another package.json is found on the parent structure which
-    // is defined as workspace
-    if (!workspaceFolder) {
-      workspaceFolder = currentFolder;
+
+      // Consider the first folder to have package.json as the root folder
+      // Unless another package.json is found on the parent structure which
+      // is defined as workspace
+      if (!workspaceFolder) {
+        workspaceFolder = currentFolder;
+      }
     }
 
     // Move back one more folder
@@ -117,7 +118,7 @@ if (!commands[cmd]) {
 
   // Also if react-native is available in the workspace, use the react-native
   // provided by the workspace
-  if (fs.existsSync(path.resolve(config.WORKSPACE, 'node_modules', 'react-native', 'package.json'))) {
+  if (config.WORKSPACE && fs.existsSync(path.resolve(config.WORKSPACE, 'node_modules', 'react-native', 'package.json'))) {
     // TODO: Check react-native versions
     config.REACT_NATIVE_DIR = config.WORKSPACE;
   }
