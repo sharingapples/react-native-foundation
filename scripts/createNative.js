@@ -45,6 +45,28 @@ module.exports = async function (config) {
 
     // Cleanup the folder when done
     rimraf.sync(tmpFolder);
+
+    // Also update package.json to include react and react-native
+    // dependencies
+    const pkgFolder = config.APP_FOLDER || config.WORKSPACE;
+    const pkgFile = path.resolve(pkgFolder, 'package.json');
+    const pkg = JSON.parse(fs.readFileSync(pkgFile));
+    const old = pkg.dependencies;
+    function update(name, value) {
+      if (!pkg.dependencies) {
+        pkg.dependencies = { [name]: v };
+      } else if (!pkg.dependencies[name]) {
+        pkg.dependencies[name] = value;
+      } else {
+        return false;
+      }
+      return true;
+    }
+
+    if (update('react', config.ReactVersion) ||
+        update('react-native', config.ReactNativeVersion)) {
+      fs.writeFileSync(pkgFile, JSON.stringify(pkg, null, 2));
+    }
   });
 
   return null;
