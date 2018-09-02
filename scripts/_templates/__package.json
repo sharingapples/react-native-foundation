@@ -1,7 +1,7 @@
 {
   "name": "{{ProjectName}}",
   "version": "1.0.0",
-  "private": "true",
+  "private": true,
   "scripts": {
     "start": "foundation start",
     "android": "foundation run-android",
