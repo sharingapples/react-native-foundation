@@ -129,7 +129,8 @@ if (!commands[cmd]) {
   }
 
   Promise.resolve(commands[cmd](config, package, remaining)).catch((err) => {
-    console.error(err);
+    console.error(err.message);
+    return null;
   }).then((args) => {
     if (args === null) {
       // The command doesn't want to be transferred
