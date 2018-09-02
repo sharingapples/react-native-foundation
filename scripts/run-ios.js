@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('fs');
-
+const { spawn } = require('child_process');
 const getBuildFolder = require('./_getBuildFolder');
 const Buddy = require('./_PlistBuddy');
 
@@ -22,8 +22,6 @@ const appIcons = [
     '1024@1x',
   ]]
 ];
-
-console.log(appIcons);
 
 module.exports = async function (config, package) {
   const manifest = {
@@ -123,7 +121,22 @@ module.exports = async function (config, package) {
     fs.writeFileSync(contentFile, JSON.stringify(ContentsJson, null, 2));
   }
 
-  return [
-    '--no-packager'
-  ]
+  return new Promise((resolve, reject) => {
+    // Perform a pod install
+    console.log('POD::INSTALL');
+    const podInstall = spawn('pod', ['install'], {
+      cwd: path.resolve(iosFolder),
+      stdio: ['inherit', 'inherit', 'inherit']
+    });
+
+    podInstall.on('exit', (code) => {
+      if (code !== 0) {
+        return reject(new Error(`Error while installing pods. Code: ${code}`));
+      }
+
+      resolve([
+        '--no-packager',
+      ]);
+    });
+  });
 };
