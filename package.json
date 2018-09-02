@@ -6,9 +6,13 @@
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest"
   },
+  "bin": {
+    "foundation": "./scripts/entry.js"
+  },
   "dependencies": {
     "react": "16.4.1",
-    "react-native": "0.56.0"
+    "react-native": "0.56.0",
+    "rimraf": "^2.6.2"
   },
   "devDependencies": {
     "babel-jest": "23.4.2",
