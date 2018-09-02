@@ -11,20 +11,11 @@ const dpis = [
 ];
 
 module.exports = function (config, package) {
-  // Update the app name, bundleId, build, version into the manifest
-  const manifest = {
-    appName: config.appName || 'Foundation',
-    version: config.version || '1.0',
-    bundleId: config.bundleId || 'com.reactjs.foundation',
-    build: config.build || 1,
-  };
-
   const androidFolder = path.resolve(config.REACT_NATIVE_DIR, 'android');
   const buildFolder = getBuildFolder(config);
   const manifestFile = path.resolve(buildFolder, 'manifest.json');
 
-  fs.writeFileSync(manifestFile, JSON.stringify(manifest, null, 2));
-
+  fs.writeFileSync(manifestFile, JSON.stringify(config, null, 2));
 
   function tryCopy(dpi, sourceFolder, name, alternate) {
     const targetFolder = path.resolve(androidFolder, 'app', 'src', 'main', 'res', `mipmap-${dpi}`);
@@ -50,7 +41,6 @@ module.exports = function (config, package) {
 
   // Update the launcher icons and splash icons
   if (config.launcherIcon) {
-    console.log('Launcher icons at', config.launcherIcon);
     // Replace all icons
     dpis.forEach((dpi) => {
       const file = tryCopy(dpi, config.launcherIcon, 'ic_launcher');
@@ -71,7 +61,7 @@ module.exports = function (config, package) {
 
     // appId is now customizable via config
     '--appId',
-    manifest.bundleId,
+    config.bundleId,
 
     // Foundation starts with SplashActivity and not MainActivity
     '--main-activity',

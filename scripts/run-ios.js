@@ -24,13 +24,6 @@ const appIcons = [
 ];
 
 module.exports = async function (config, package) {
-  const manifest = {
-    appName: config.appName || 'Foundaion',
-    version: config.version || '1.0',
-    bundleId: config.bundleId || 'com.reactjs.foundation',
-    build: config.build || 1,
-  };
-
   const iosFolder = path.resolve(config.REACT_NATIVE_DIR, 'ios');
   const buildFolder = getBuildFolder(config);
 
@@ -38,10 +31,10 @@ module.exports = async function (config, package) {
 
   try {
     // use PlistBuddy to make changes to Info.plist
-    await Buddy(infoPlist, `SET :CFBundleDisplayName ${manifest.appName}`);
-    await Buddy(infoPlist, `SET :CFBundleIdentifier ${manifest.bundleId}`);
-    await Buddy(infoPlist, `SET :CFBundleShortVersionString ${manifest.version}`);
-    await Buddy(infoPlist, `SET :CFBundleVersion ${manifest.build}`);
+    await Buddy(infoPlist, `SET :CFBundleDisplayName ${config.appName}`);
+    await Buddy(infoPlist, `SET :CFBundleIdentifier ${config.bundleId}`);
+    await Buddy(infoPlist, `SET :CFBundleShortVersionString ${config.version}`);
+    await Buddy(infoPlist, `SET :CFBundleVersion ${config.build}`);
   } catch (err) {
     console.error(err);
   }

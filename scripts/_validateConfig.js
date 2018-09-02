@@ -5,15 +5,8 @@ const config = require(path.resolve('foundation.config.js'));
 module.exports = (pkg) => {
   const res = {};
 
-  if (config.appName) {
-    // Make sure the appname is a valid string
-    res.appName = config.appName;
-  }
-
-  if (config.bundleId) {
-    // Make sure the bundleId is a valid string
-    res.bundleId = config.bundleId;
-  }
+  res.appName = config.appName || 'Foundation Demo';
+  res.bundleId = config.bundleId || 'com.reactjs.foundation.demo';
 
   if (config.build) {
     if (typeof config.build !== 'number') {
@@ -22,6 +15,7 @@ module.exports = (pkg) => {
       throw new Error(`Error in configuration, build should a positive integer`);
     }
   }
+  res.build = config.build || 1;
 
   if (config.version) {
     // see if the version should be read from the package.json file
@@ -31,6 +25,7 @@ module.exports = (pkg) => {
       res.version = config.version;
     }
   }
+  res.version = config.version || '1.0';
 
   if (config.launcher) {
     // the launcher icon is supposed to be a folder
