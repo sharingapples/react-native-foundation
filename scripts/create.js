@@ -2,11 +2,6 @@ const fs = require('fs');
 const path = require('path');
 const copyFiles = require('./_recursiveCopy');
 
-const textFiles = [
-  '.ts', '.js', '.json', '.txt', '.html', '.css', '.less',
-  '.java', '.m', '.h', '.plist', '.ini',
-];
-
 module.exports = function (config, package, args) {
   // Init will create an index.js and a package.json file.
   // the only files required for creating a foundation app

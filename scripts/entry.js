@@ -8,6 +8,7 @@ const execRN = require('./_execRN');
 const validateConfig = require('./_validateConfig');
 
 const create = require('./create');
+const createNative = require('./createNative');
 const start = require('./start');
 const runIos = require('./run-ios');
 const runAndroid = require('./run-android');
@@ -16,6 +17,7 @@ const reactNativePkg = require('react-native/package.json');
 
 const commands = {
   create,
+  'create-native': createNative,
   start,
   'run-ios': runIos,
   'run-android': runAndroid,
@@ -65,7 +67,6 @@ if (!commands[cmd]) {
   let workspaceFolder = null;
   do {
     const pkgFile = path.resolve(currentFolder, 'package.json');
-    console.log(pkgFile);
     if (fs.existsSync(pkgFile)) {
       try {
         const pkg = JSON.parse(fs.readFileSync(pkgFile));
