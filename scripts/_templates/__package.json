@@ -1,0 +1,17 @@
+{
+  "name": "{{ProjectName}}",
+  "version": "1.0.0",
+  "private": "true",
+  "scripts": {
+    "start": "foundation start",
+    "android": "foundation run-android",
+    "ios": "foundation run-ios"
+  },
+  "peerDependencies": {
+    "react": "^{{ReactVersion}}",
+    "react-native": "^{{ReactNativeVersion}}"
+  },
+  "devDepdendencies": {
+
+  }
+}

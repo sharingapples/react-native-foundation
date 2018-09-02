@@ -7,11 +7,15 @@ const path = require('path');
 const execRN = require('./_execRN');
 const validateConfig = require('./_validateConfig');
 
+const create = require('./create');
 const start = require('./start');
 const runIos = require('./run-ios');
 const runAndroid = require('./run-android');
+const reactPkg = require('react/package.json');
+const reactNativePkg = require('react-native/package.json');
 
 const commands = {
+  create,
   start,
   'run-ios': runIos,
   'run-android': runAndroid,
@@ -26,6 +30,9 @@ const config = {
 
   // The app folder to check for native dependencies
   APP_FOLDER: null,
+
+  ReactVersion: reactPkg.version,
+  ReactNativeVersion: reactNativePkg.version,
 };
 
 // The react-native command is available as 3rd argument
@@ -119,9 +126,14 @@ if (!commands[cmd]) {
     Object.assign(config, validateConfig(package));
   }
 
-  Promise.resolve(commands[cmd](config, package)).catch((err) => {
+  Promise.resolve(commands[cmd](config, package, remaining)).catch((err) => {
     console.error(err);
   }).then((args) => {
+    if (args === null) {
+      // The command doesn't want to be transferred
+      return;
+    }
+
     const finalArgs = [cmd].concat(remaining).concat(args);
     execRN(config.REACT_NATIVE_DIR, finalArgs);
   });
