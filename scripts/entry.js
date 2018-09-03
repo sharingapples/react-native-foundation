@@ -15,6 +15,8 @@ const gitIgnore = require('./gitIgnore');
 const runIos = require('./run-ios');
 const runAndroid = require('./run-android');
 const releaseAndroid = require('./release-android');
+const releaseIos = require('./release-ios');
+const uploadIos = require('./upload-ios');
 const reactPkg = require('react/package.json');
 const reactNativePkg = require('react-native/package.json');
 
@@ -28,6 +30,8 @@ const commands = {
   'gitignore': gitIgnore,
   'git-ignore': gitIgnore,
   'release-android': releaseAndroid,
+  'release-ios': releaseIos,
+  'upload-ios': uploadIos,
 };
 
 const config = {
