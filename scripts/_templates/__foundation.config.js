@@ -8,4 +8,7 @@ module.exports = {
 
   // Provide the git repo to extract native (android, ios) files
   nativeRepo: 'git@github.com:sharingapples/react-native-foundation.git',
+
+  // Android Key Store file to verify the app on play store
+  androidKeyStore: null,
 };

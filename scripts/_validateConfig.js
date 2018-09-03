@@ -50,6 +50,8 @@ module.exports = (pkg) => {
   // Native Repo source to extract android and ios folders
   res.nativeRepo = config.nativeRepo || 'git@github.com:sharingapples/react-native-foundation.git';
 
+  // Release keys
+  res.androidKeyStore = config.androidKeyStore;
   return res;
 }
 
