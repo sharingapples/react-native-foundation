@@ -11,6 +11,7 @@ const info = require('./info');
 const create = require('./create');
 const createNative = require('./createNative');
 const start = require('./start');
+const gitIgnore = require('./gitIgnore');
 const runIos = require('./run-ios');
 const runAndroid = require('./run-android');
 const release = require('./release');
@@ -25,6 +26,8 @@ const commands = {
   'run-ios': runIos,
   'run-android': runAndroid,
   release,
+  'gitignore': gitIgnore,
+  'git-ignore': gitIgnore,
 };
 
 const config = {

@@ -31,13 +31,12 @@ module.exports = async function (config) {
     'clone', '--depth',
     1,
     config.nativeRepo,
-    '.'
+    tmpFolder,
   ], {
-    cwd: tmpFolder,
     stdio: ['inherit', 'inherit', 'inherit']
   });
 
-  console.log(`Cloning remote repository ${config.nativeRepo} => ${tmpFolder}`);
+  console.log(`Cloning remote repository ${config.nativeRepo}`);
   git.on('exit', (code) => {
     if (code === 0) {
       // Git clone is now complete, copy the ios and android folders
@@ -46,6 +45,15 @@ module.exports = async function (config) {
       recursiveCopy(path.resolve(tmpFolder, 'ios'), iosFolder, null, '');
       fs.mkdirSync(androidFolder);
       recursiveCopy(path.resolve(tmpFolder, 'android'), androidFolder, null, '');
+
+      const gitIgnore = path.resolve(config.WORKSPACE, '.gitignore');
+      if (!fs.existsSync(gitIgnore)) {
+        recursiveCopy(path.resolve(tmpFolder, '.gitignore'), gitIgnore);
+      } else {
+        console.log('===================================');
+        console.log('It looks like you already have a `.gitignore` file on your workspace. The native code produce a lot of intermediate files, which you might not want to commit to your source control. In case you are too lazy to craft your own .gitignore you can start with the one provided by foundation (react-native). Just run the command:');
+        console.log('    $ foundation gitignore');
+      }
     }
 
     // Cleanup the folder when done
