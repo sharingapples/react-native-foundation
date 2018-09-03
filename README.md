@@ -19,7 +19,7 @@ react-native project.
 This command works similar to `react-native init` except that
 the project will not include the native sources, but a
 `foundation.config.js` file, which could be used to configure
-the most trivial native [configurations](#Configurations).
+the most trivial native [configurations](#configurations).
 
 > `$ foundation run-android`<br/>
 > `$ foundation run-ios`<br/>
@@ -79,7 +79,7 @@ remove your current code, get the code from foundation and then look for changes
 5. Compare and update changes with your existing native code.
 
 If your native code has changed quite a lot then its
-easier to include the [changes](#Nativesourcechanges) as mentioned above, in your native code to support `foundation`.
+easier to include the [changes](#native-source-changes) as mentioned above, in your native code to support `foundation`.
 
 
 ### Configurations
@@ -126,6 +126,11 @@ easier to include the [changes](#Nativesourcechanges) as mentioned above, in you
         * `ios-splash@1x.png`
         * `ios-splash@2x.png`
         * `ios-splash@3x.png`
+7. `nativeRepo`: You can build your custom native repo and use
+it instead of the stock foundation repo. Just make sure your
+native repo supports foundation.
 
 You could also use the [Sketch App Template](https://github.com/sharingapples/react-native-foundation/blob/master/Icon-Template.sketch) for the `launcher` and `splash` icons.
 
+## TODO
+1. **Release**: Simple command to create `apk` and `ipa` files ready for submission.
