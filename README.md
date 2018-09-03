@@ -133,5 +133,15 @@ native repo supports foundation.
 
 You could also use the [Sketch App Template](https://github.com/sharingapples/react-native-foundation/blob/master/Icon-Template.sketch) for the `launcher` and `splash` icons.
 
+## Notes
+The react-native apps use `Foundation` as a default module name. So yes, in development mode you could use the same
+native app to load different apps being served by the metro
+bundler, and as long as there is no difference in react-native
+version or native modules, your app should load just fine.
+
+It's actually one of the way to improve app development. Build
+one app with all your native dependencies. Deploy it on all
+your test devices. And run `foundation start` anywhere.
+
 ## TODO
 1. **Release**: Simple command to create `apk` and `ipa` files ready for submission.
