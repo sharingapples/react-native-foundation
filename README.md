@@ -167,12 +167,11 @@ be deployed for app store. Make sure to include your
 
 This command will use your apple developer account and
 submit the app for review on app store. Make sure to include
-your **developerId** (email address) in (configuration)[#configurations].
+your **developerId** (email address) in [configuration](#configurations).
 
 ### Points to consider while releasing
 1. The native code should have been created. `foundation create-native`.
-2. If you are on working with yarn workspaces. Make sure
-of the following points:
+2. If you are working with yarn workspaces. Make sure:
      * The native libraries dependencies are also there on
        your workspace `package.json`, even if they have been
        added to your apps' `package.json`.
@@ -190,7 +189,18 @@ of the following points:
    `ios.developerId`: The apple developer id (email)
 4. Environment variables for setting password<br/>
    `ANDROID_KEY_STORE_PASS`: password required for reading the key store file.<br/>
-   `APPLER_DEVELOPER_PASS`: password to apple developer account to publish app via itunes connect.
+   `APPLER_DEVELOPER_PASS`: password to apple developer account to publish app via itunes connect.<br/>
+   *If the passwords are not set, they would have to be provided during the release process*
+
+## Additional commands
+> `$ foundation info` <br/>
+Display information as per your configuration.
+
+> `$ foundation info-ios`<br/>
+Display information considering ios platform.
+
+> `$ foundation info-android`<br/>
+Display information considering android platform.
 
 ## Notes
 The react-native apps use `Foundation` as a default module name. So yes, in development mode you could use the same
