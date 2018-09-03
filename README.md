@@ -1,7 +1,7 @@
 # Foundation
 A simple react-native cli facade to make some of the trivial
 native tasks simpler and easier.
-1. Use [configuration](#configurations) instead of making changes to native code
+1. Use [configuration](#configurations) instead of making changes to native code.
 2. Make it easier to [release apps](#releasing) for android as well as iOS. Ready to deploy on Play Store and App Store.
 3. Make react-native project [yarn workspaces](https://yarnpkg.com/en/docs/workspaces) friendly.
 
@@ -153,7 +153,7 @@ You can easily release your app to Google Play Store and Apple App Store with si
 
 With proper configuration, this command will generate an
 apk ready to upload for Google Play Store. Make sure you
-have properly (configured)[#configurations] your `foundation.config.js` with
+have properly [configured](#configurations) your `foundation.config.js` with
 sigining keys.
 
 **iOS**:<br/>
@@ -161,7 +161,7 @@ sigining keys.
 
 This command will generate `ipa` files that are ready to
 be deployed for app store. Make sure to include your
-**teamId** in (configuration)[#configurations].
+**teamId** in [configuration](#configurations).
 
 > `$ foundation upload-ios`
 
