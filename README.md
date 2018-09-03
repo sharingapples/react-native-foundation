@@ -5,6 +5,8 @@ native tasks simpler and easier.
 2. Make it easier to [release apps](#releasing) for android as well as iOS. Ready to deploy on Play Store and App Store.
 3. Make react-native project [yarn workspaces](https://yarnpkg.com/en/docs/workspaces) friendly.
 
+*WARNING: This utility is in alpha. Report any issues you find.*
+
 ## Installation
 > `$ npm install -g react-native-foundation`
 
