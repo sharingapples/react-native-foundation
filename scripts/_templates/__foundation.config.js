@@ -11,4 +11,9 @@ module.exports = {
 
   // Android Key Store file to verify the app on play store
   androidKeyStore: null,
+
+  // iOS specific configurations
+  ios: {
+
+  }
 };

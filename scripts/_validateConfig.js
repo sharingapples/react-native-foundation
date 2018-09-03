@@ -52,6 +52,8 @@ module.exports = (pkg) => {
 
   // Release keys
   res.androidKeyStore = config.androidKeyStore;
+
+  res.ios = config.ios || {};
   return res;
 }
 
