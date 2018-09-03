@@ -1,6 +1,7 @@
 # Foundation
 A simple react-native cli facade to make some of the trivial
-native tasks simpler and easier.
+native tasks simpler and easier. And make your react-native
+project work with [yarn workspaces](https://yarnpkg.com/en/docs/workspaces).
 
 ## Installation
 > `$ npm install -g react-native-foundation`
