@@ -46,6 +46,9 @@ module.exports = (pkg) => {
     res.splashIcon = folder;
   }
 
+  // Native Repo source to extract android and ios folders
+  res.nativeRepo = config.nativeRepo || 'git@github.com:sharingapples/react-native-foundation.git';
+
   return res;
 }
 

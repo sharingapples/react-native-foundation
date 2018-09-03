@@ -1,4 +1,4 @@
-const { exec } = require('child_process');
+const { spawn } = require('child_process');
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
@@ -26,13 +26,18 @@ module.exports = async function (config) {
   }
 
   const tmpFolder = fs.mkdtempSync(os.tmpdir());
-  console.log('Temp folder', tmpFolder);
   // Everythings ok, now make a copy through git
-  const git = exec('git clone --depth 1 git@github.com:sharingapples/react-native-foundation.git .', {
-    cwd: tmpFolder
+  const git = spawn('git', [
+    'clone', '--depth',
+    1,
+    config.nativeRepo,
+    '.'
+  ], {
+    cwd: tmpFolder,
+    stdio: ['inherit', 'inherit', 'inherit']
   });
 
-  console.log('Cloning remote repository github:sharingapples/react-native-foundation.git');
+  console.log(`Cloning remote repository ${config.nativeRepo} => ${tmpFolder}`);
   git.on('exit', (code) => {
     if (code === 0) {
       // Git clone is now complete, copy the ios and android folders

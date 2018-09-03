@@ -39,6 +39,9 @@ const config = {
 
   ReactVersion: reactPkg.version,
   ReactNativeVersion: reactNativePkg.version,
+
+  // Allow using different repo for extracting the native code
+  nativeRepo: null,
 };
 
 // The react-native command is available as 3rd argument
