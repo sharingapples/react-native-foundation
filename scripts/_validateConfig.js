@@ -25,7 +25,7 @@ module.exports = (pkg) => {
       res.version = config.version;
     }
   }
-  res.version = config.version || '1.0';
+  res.version = res.version || '1.0';
 
   if (config.launcher) {
     // the launcher icon is supposed to be a folder
