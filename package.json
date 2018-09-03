@@ -23,7 +23,7 @@
   },
   "license": "MIT",
   "author": "Ranjan Shrestha <ranjan@sharingapples.com>",
-  "repository": "git@github.com:sharingapples/react-native-foundation.git",
+  "repository": "github:sharingapples/react-native-foundation",
   "keywords": [
     "foundation",
     "react-native"
