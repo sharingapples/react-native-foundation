@@ -1,5 +1,5 @@
 # Foundation
-A simple react-native cli facade to make some of the trivial
+A simple react-native cli wrapper to make some of the trivial
 native tasks simpler and easier.
 1. Use [configuration](#configurations) instead of making changes to native code.
 2. Make it easier to [release apps](#releasing) for android as well as iOS. Ready to deploy on Play Store and App Store.
