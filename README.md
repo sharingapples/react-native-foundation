@@ -81,9 +81,37 @@ remove your current code, get the code from foundation and then look for changes
    pods for ios.
 5. Compare and update changes with your existing native code.
 
-If your native code has changed quite a lot then its
-easier to include the [changes](#native-source-changes) as mentioned above, in your native code to support `foundation`.
+If you want to change your native code instead created with `react-native init`<br/>
+**For Android**<br/>
+1. Include [foundation.config.js](#config-example) in the project root.
+2. Edit `android/app/build.gradle` to update app information
+     1. Add the following line on top<br/>
+     `def manifestJson = new groovy.json.JsonSlurper().parseText(file('../../build/manifest.json').text);`
+     2. Use `manifestJson.bundleId` for `defaultConfig.applicationId`.
+     3. Use `manifestJson.build` for `defaultConfig.versionCode`
+     4. Use `manifestJson.version` for `defaultConfig.versionName`
+     5. Include the following command somewhere inside `defaultConfig`<br/>
+     `resValue "string", "app_name", manifestJson.appName`
+3. Edit `android/app/src/main/res/values/strings.xml` and
+   remove the line that defines app name `<string name="app_name">....</string>`
+4. Remove any signing configuration that has been added
+   to `android/app/build.gradle`. Provide the keystore file
+   via the `foundation.config.js`. Otherwise `release-android`
+   command might not work.
+5. `foundation run-android` should now build the android app
+   as per `foundation.config.js` and `foundation release-android` should generate apk ready for publishing.
 
+**For iOS**<br/>
+1. Include [foundation.config.js](#config-example) in the project root.
+2. Add ios specific configuration in the config file.<br/>
+   `ios: { scheme: '<RNProject>' }`. The scheme name is
+   typically what you used to create the React Native
+   project. This should be the main folder inside `ios`
+   and should have the same scheme available for building.
+3. `foundation run-ios` should now run the ios app on the
+   simulator, `foundation release-ios` should generate
+   ios app ready for publishing and `foundation upload-ios`
+   should upload the app to the app store via iTunes connect.
 
 ### Configurations
 1. `appName`: The name of the app as displayed on your mobile
@@ -144,6 +172,25 @@ provide:
     * `developerId`: The user id to login to your Apple developer account for publishing.
 
 *You could also use the [Sketch App Template](https://github.com/sharingapples/react-native-foundation/blob/master/Icon-Template.sketch) for the `launcher` and `splash` icons.*
+
+### Config Example
+`foundation.config.js`
+```javascript
+module.exports = {
+  appName: 'Name of the app',
+  bundleId: 'com.sharingapples.foundation', // Identity of your app on play store or app store
+  build: 10, // An incremental build number (android version code or ios Build
+  version: '1.3.0', // A version text
+
+  android: {
+    keyStore: '~/secrets/my-apps-key.keystore'
+  },
+  ios: {
+    teamId: '1234567890', // You 10 character team id
+    developerId: 'someone@somewhere.com', // Your developer account id,
+  },
+};
+```
 
 ## Releasing
 You can easily release your app to Google Play Store and Apple App Store with simple commands.
