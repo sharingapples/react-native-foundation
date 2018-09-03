@@ -22,6 +22,8 @@ const reactNativePkg = require('react-native/package.json');
 
 const commands = {
   info,
+  'info-ios': info,
+  'info-android': info,
   create,
   'create-native': createNative,
   start,
@@ -50,6 +52,11 @@ const config = {
   // Allow using different repo for extracting the native code
   nativeRepo: null,
 };
+
+function detectPlatform(cmd) {
+  const platforms = ['ios', 'android'];
+  return platforms.find(p => cmd.endsWith(p));
+}
 
 // The react-native command is available as 3rd argument
 const cmd = process.argv[2];
@@ -142,7 +149,8 @@ if (!commands[cmd]) {
 
   // Looks like the app has some configuration to share
   if (fs.existsSync('foundation.config.js')) {
-    Object.assign(config, validateConfig(package));
+    const platform = detectPlatform(cmd);
+    Object.assign(config, validateConfig(package, platform));
   }
 
   Promise.resolve(commands[cmd](config, package, remaining)).catch((err) => {

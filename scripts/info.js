@@ -7,8 +7,8 @@ module.exports = function (config) {
   console.log('Bundle ID:', config.bundleId);
   console.log('Build Number:', config.build);
   console.log('Version:', config.version);
-  console.log('Launch Icons:', config.launcherIcon || 'default');
-  console.log('Splash Icons:', config.splashIcon || 'default');
+  console.log('Launch Icons:', config.launcherIcon || '<default>');
+  console.log('Splash Icons:', config.splashIcon || '<default>');
   console.log('');
 
   console.log('========== Structure ===========');
@@ -21,6 +21,8 @@ module.exports = function (config) {
   console.log('');
 
   console.log('========== Release ===========');
-  console.log('Android Key Store:', config.androidKeyStore);
+  console.log('Android Key Store:', config.android.keyStore || '<NA>');
+  console.log('iOS Team ID:', config.ios.teamId || '<NA>');
+  console.log('iOS Developer ID:', config.ios.developerId || '<NA>');
   return null;
 }

@@ -7,16 +7,16 @@ const buildAndroid = require('./_buildAndroid');
 
 module.exports = async function(config) {
   // KeyStore file is required for releasing an android app
-  if (!config.androidKeyStore) {
-    throw new Error('Android key store file needs to be provided for releasing. `androidKeyStore` in foundation.config.js');
+  if (!config.android.keyStore) {
+    throw new Error('Android key store file needs to be provided for releasing. `android.keyStore` in foundation.config.js');
   }
 
-  const keyStoreFile = config.androidKeyStore.startsWith('~/') ?
-    path.resolve(os.homedir(), config.androidKeyStore.substr(2)) :
-    path.resolve(config.androidKeyStore);
+  const keyStoreFile = config.android.keyStore.startsWith('~/') ?
+    path.resolve(os.homedir(), config.android.keyStore.substr(2)) :
+    path.resolve(config.android.keyStore);
 
   if (!fs.existsSync(keyStoreFile)) {
-    throw new Error(`Key Store file ${config.androidKeyStore} doesn't exist`);
+    throw new Error(`Key Store file ${config.android.keyStore} doesn't exist`);
   }
 
   const androidFolder = path.resolve(config.REACT_NATIVE_DIR, 'android');

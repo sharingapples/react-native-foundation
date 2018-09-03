@@ -1,59 +1,56 @@
 const fs = require('fs');
 const path = require('path');
 
-module.exports = (pkg) => {
+function coalesce(...args) {
+  return args.find(arg => arg !== null && arg !== undefined);
+}
+
+module.exports = (pkg, platform) => {
   const config = require(path.resolve('foundation.config.js'));
 
   const res = {};
+  const platformConfig = coalesce(config[platform], {});
 
-  res.appName = config.appName || 'Foundation Demo';
-  res.bundleId = config.bundleId || 'com.reactjs.foundation.demo';
+  res.appName = coalesce(platformConfig.appName, config.appName, 'Foundation Demo');
+  res.bundleId = coalesce(platformConfig.bundleId, config.bundleId, 'com.reactjs.foundation.demo');
 
-  if (config.build) {
-    if (typeof config.build !== 'number') {
-      throw new Error('Error in configuration, build should be a number');
-    } else if (config.build <= 0 || `${config.build}`.indexOf('.') >= 0) {
-      throw new Error(`Error in configuration, build should a positive integer`);
-    }
+  res.build = coalesce(platformConfig.build, config.build, 1);
+  if (typeof res.build !== 'number') {
+    throw new Error('Error in configuration, build should be a number');
+  } else if (res.build <= 0 || `${res.build}`.indexOf('.') >= 0) {
+    throw new Error(`Error in configuration, build should a positive integer`);
   }
-  res.build = config.build || 1;
 
-  if (config.version) {
-    // see if the version should be read from the package.json file
-    if (config.version === '*') {
-      res.version = pkg.version;
-    } else {
-      res.version = config.version;
-    }
+  res.version = coalesce(platformConfig.version, config.version, '1.0');
+  if (res.version === '*') {
+    res.version = pkg.version;
   }
-  res.version = res.version || '1.0';
 
-  if (config.launcher) {
-    // the launcher icon is supposed to be a folder
-    const folder = path.resolve(config.launcher);
-    if (!fs.existsSync(folder) || !fs.lstatSync(folder).isDirectory()) {
+  res.launcherIcon = coalesce(platformConfig.launcher, config.launcher);
+  if (res.launcherIcon) {
+    res.launcherIcon = path.resolve(res.launcherIcon);
+    if (!fs.existsSync(res.launcherIcon) || !fs.lstatSync(res.launcherIcon).isDirectory()) {
       throw new Error('Launcher icon is supposed to be a folder consisting of launch icons of various sizes');
     }
-
-    res.launcherIcon = folder;
   }
 
-  if (config.splash) {
-    const folder = path.resolve(config.splash);
-    if (!fs.existsSync(folder) || !fs.lstatSync(folder).isDirectory()) {
+  res.splashIcon = coalesce(platformConfig.splash, config.splash);
+  if (res.splashIcon) {
+    res.splashIcon = path.resolve(res.splashIcon);
+    if (!fs.existsSync(res.splashIcon) || !fs.lstatSync(res.splashIcon).isDirectory()) {
       throw new Error('Splash icon is supposed to be a folder consisting of splash icons of various sizes');
     }
-
-    res.splashIcon = folder;
   }
 
   // Native Repo source to extract android and ios folders
-  res.nativeRepo = config.nativeRepo || 'git@github.com:sharingapples/react-native-foundation.git';
+  res.nativeRepo = coalesce(config.nativeRepo, 'git@github.com:sharingapples/react-native-foundation.git');
 
-  // Release keys
-  res.androidKeyStore = config.androidKeyStore;
+  // Android keys
+  res.android = config.android || {};
 
+  // ios keys
   res.ios = config.ios || {};
+
   return res;
 }
 
