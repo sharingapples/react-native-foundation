@@ -4,8 +4,11 @@ native tasks simpler and easier.
 1. Use [configuration](#configurations) instead of making changes to native code.
 2. Make it easier to [release apps](#releasing) for android as well as iOS. Ready to deploy on Play Store and App Store.
 3. Make react-native project [yarn workspaces](https://yarnpkg.com/en/docs/workspaces) friendly.
+4. Provide a Splash screen for android as well.
 
-*WARNING: This utility is in alpha. Report any issues you find.*
+*WARNING: This utility still needs a lot more testing with different use cases. It is however directly compatilbe with react-native cli, so you can always revert back to using react-native cli any time. Uses react-native version 0.56
+while creating new project, but the utility should work with
+prior react-native verions as well. [Read below for instructions](#existing-react-native-projects)*
 
 ## Installation
 > `$ npm install -g react-native-foundation`
@@ -16,9 +19,6 @@ or
 
 ## Usage
 ### New Project
-The foundation cli could be easily used to create a new
-react-native project.
-
 > `$ foundation create <ProjectName>`<br/>
 
 This command works similar to `react-native init` except that
@@ -69,21 +69,24 @@ changes to incorporate the configurations automatically.
 launch screen for an extended period, to avoid showing white screen when the javascript side loads. (Extracted from react-native pro-tip)
 9. **iOS** Uses PlistBuddy to change `Foundation/Info.plist` dynamically to update `name`, `version`, `bundleId` and `build` when building ios app.
 
-### Existing Project
-Since the native source is a bit different than what stock
-react-native provides, follow the following steps. (Basically
-remove your current code, get the code from foundation and then look for changes).
-1. Make sure your code is committed to your source control.
-2. Remove `ios` and `android` folder.
-3. Run `foundation create-native` on your workspace.<br/>
-   This will create a fresh android and ios folder.
-4. You could use `foundation link` or `react-native link`
-   to link to your native dependencies once you have the
-   native sources. Note that your native sources now use
-   pods for ios.
-5. Compare and update changes with your existing native code.
+### Existing React Native Projects
+The following changes need to be made to your native code
+in the react-native project, for the foundation commands
+to work.<br/>
 
-If you want to change your native code instead created with `react-native init`<br/>
+
+**For iOS**<br/>
+1. Include [foundation.config.js](#config-example) in the project root.
+2. Add ios specific configuration in the config file.<br/>
+   `ios: { scheme: '<RNProject>' }`. The scheme name is
+   typically what you used to create the React Native
+   project. This should be the main folder inside `ios`
+   and should have the same scheme available for building.
+3. `foundation run-ios` should now run the ios app on the
+   simulator, `foundation release-ios` should generate
+   ios app ready for publishing and `foundation upload-ios`
+   should upload the app to the app store via iTunes connect.
+
 **For Android**<br/>
 1. Include [foundation.config.js](#config-example) in the project root.
 2. Edit `android/app/build.gradle` to update app information
@@ -102,18 +105,7 @@ If you want to change your native code instead created with `react-native init`<
    command might not work.
 5. `foundation run-android` should now build the android app
    as per `foundation.config.js` and `foundation release-android` should generate apk ready for publishing.
-
-**For iOS**<br/>
-1. Include [foundation.config.js](#config-example) in the project root.
-2. Add ios specific configuration in the config file.<br/>
-   `ios: { scheme: '<RNProject>' }`. The scheme name is
-   typically what you used to create the React Native
-   project. This should be the main folder inside `ios`
-   and should have the same scheme available for building.
-3. `foundation run-ios` should now run the ios app on the
-   simulator, `foundation release-ios` should generate
-   ios app ready for publishing and `foundation upload-ios`
-   should upload the app to the app store via iTunes connect.
+6. The splash screen won't be available with these changes. It's however pretty easy, if you check how it works. Will document it later.
 
 ### Configurations
 1. `appName`: The name of the app as displayed on your mobile
@@ -219,7 +211,6 @@ submit the app for review on app store. Make sure to include
 your **developerId** (email address) in [configuration](#configurations).
 
 ### Points to consider while releasing
-1. The native code should have been created. `foundation create-native`.
 2. If you are working with yarn workspaces. Make sure:
      * The native libraries dependencies are also there on
        your workspace `package.json`, even if they have been
