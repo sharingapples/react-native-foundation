@@ -105,6 +105,7 @@ to work.<br/>
    command might not work.
 5. `foundation run-android` should now build the android app
    as per `foundation.config.js` and `foundation release-android` should generate apk ready for publishing.
+   Note that the `run-android` command will only create the apk, but will not be able to start the Activity (TODO).
 6. The splash screen won't be available with these changes. It's however pretty easy, if you check how it works. Will document it later.
 
 ### Configurations
