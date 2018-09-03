@@ -82,16 +82,27 @@ module.exports = async function(config) {
 
       console.log('Sign the APK');
 
-      let tries = 0;
       const MAX_TRIES = 3;
+      let tries = 0;
       do {
-        // Sign the zipped apk
-        res = spawnSync(apksigner, [
+        // If key store password is available on environment
+        // use that password
+        const args = [
           'sign',
-          '-ks', keyStoreFile,
-          '--out', releaseApk,
-          zipApk
-        ], {
+          '--ks', keyStoreFile,
+        ];
+
+        if (process.env.ANDROID_KEY_STORE_PASS) {
+          // do not retry repeatedly if password is provided from environment
+          tries = MAX_TRIES;
+          args.push('--ks-pass', `pass:${process.env.ANDROID_KEY_STORE_PASS}`);
+        }
+
+        // Add remaining parameters
+        args.push('--out', releaseApk, zipApk);
+
+        // Sign the zipped apk
+        res = spawnSync(apksigner, args, {
           cwd: apkFolder,
           stdio: ['inherit', 'inherit', 'inherit']
         });
@@ -104,11 +115,15 @@ module.exports = async function(config) {
         }
       } while (res.status !== 0 && tries < MAX_TRIES);
 
-      console.log('========================================');
+      // Remove the unwanted apk files, to avoid clutter
+      fs.unlinkSync(unsignedApk);
+      fs.unlinkSync(zipApk);
+
+      console.log('====== APK GENERATED FOR RELEASE ======');
       console.log(`  ${releaseApk}`);
-      console.log('----------------------------------------');
-      console.log(`Run adb install -r ${releaseApk}`);
-      console.log('----------------------------------------');
+      console.log('---------------------------------------');
+      console.log(`  adb install -r ${releaseApk}`);
+      console.log('---------------------------------------');
       console.log('Your app is now ready for google play store');
 
       resolve(null);
