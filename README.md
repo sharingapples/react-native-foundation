@@ -1,7 +1,9 @@
 # Foundation
 A simple react-native cli facade to make some of the trivial
-native tasks simpler and easier. And make your react-native
-project work with [yarn workspaces](https://yarnpkg.com/en/docs/workspaces).
+native tasks simpler and easier.
+1. Use [configuration](#configurations) instead of making changes to native code
+2. Make it easier to [release apps](#releasing) for android as well as iOS. Ready to deploy on Play Store and App Store.
+3. Make react-native project [yarn workspaces](https://yarnpkg.com/en/docs/workspaces) friendly.
 
 ## Installation
 > `$ npm install -g react-native-foundation`
@@ -130,8 +132,65 @@ easier to include the [changes](#native-source-changes) as mentioned above, in y
 7. `nativeRepo`: You can build your custom native repo and use
 it instead of the stock foundation repo. Just make sure your
 native repo supports foundation.
+8. `android`: Android specific configuration. This can include
+all the above configurations except `nativeRepo`
+additionally provide:
+    * `keyStore`: Path to android key store file required for
+    signing your app for releasing to Google Play Store.
+9. `ios`: iOS specific configuration. This can override all
+the above configuratios except `nativeRepo` additionaly
+provide:
+    * `teamId`: The 10 character Apple team id available on your apple developer account.
+    * `developerId`: The user id to login to your Apple developer account for publishing.
 
-You could also use the [Sketch App Template](https://github.com/sharingapples/react-native-foundation/blob/master/Icon-Template.sketch) for the `launcher` and `splash` icons.
+*You could also use the [Sketch App Template](https://github.com/sharingapples/react-native-foundation/blob/master/Icon-Template.sketch) for the `launcher` and `splash` icons.*
+
+## Releasing
+You can easily release your app to Google Play Store and Apple App Store with simple commands.
+
+**Android**:<br/>
+> `$ foundation release-android`
+
+With proper configuration, this command will generate an
+apk ready to upload for Google Play Store. Make sure you
+have properly (configured)[#configurations] your `foundation.config.js` with
+sigining keys.
+
+**iOS**:<br/>
+> `$ foundation release-ios`
+
+This command will generate `ipa` files that are ready to
+be deployed for app store. Make sure to include your
+**teamId** in (configuration)[#configurations].
+
+> `$ foundation upload-ios`
+
+This command will use your apple developer account and
+submit the app for review on app store. Make sure to include
+your **developerId** (email address) in (configuration)[#configurations].
+
+### Points to consider while releasing
+1. The native code should have been created. `foundation create-native`.
+2. If you are on working with yarn workspaces. Make sure
+of the following points:
+     * The native libraries dependencies are also there on
+       your workspace `package.json`, even if they have been
+       added to your apps' `package.json`.
+     * There is an `index.js` on your workspace root, which
+       simply imports your targetted apps index.js.
+       `import './packages/your-app'`. This is needed since
+       the ios and android javascript bundling works relative
+       to where your `react-native` package is installed.
+     * If there is a `.babelrc` in your workspace root, make
+       sure it has `react-native` as a preset. Also include
+       `babel-preset-react-native` as dev dependency.
+3. Add release configurations in `foundation.config.js`.<br/>
+   `android.keyStore`: Path to keystore required for app signing<br/>
+   `ios.teamId`: The iOS team id for publishing your app<br/>
+   `ios.developerId`: The apple developer id (email)
+4. Environment variables for setting password<br/>
+   `ANDROID_KEY_STORE_PASS`: password required for reading the key store file.<br/>
+   `APPLER_DEVELOPER_PASS`: password to apple developer account to publish app via itunes connect.
 
 ## Notes
 The react-native apps use `Foundation` as a default module name. So yes, in development mode you could use the same
@@ -142,6 +201,3 @@ version or native modules, your app should load just fine.
 It's actually one of the way to improve app development. Build
 one app with all your native dependencies. Deploy it on all
 your test devices. And run `foundation start` anywhere.
-
-## TODO
-1. **Release**: Simple command to create `apk` and `ipa` files ready for submission.
