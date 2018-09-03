@@ -50,6 +50,9 @@ const remaining = process.argv.slice(2);
 if (!commands[cmd]) {
   console.warn(`Command '${cmd}' is not recognized by foundation. Foundation will be bypassed.`);
   execRN(config.REACT_NATIVE_DIR, remaining);
+} else if (cmd === 'create') {
+  // Treat the create command specially
+  commands[cmd](config, null, remaining);
 } else {
   // An index.js is reuqired for the app to run
   if (!fs.existsSync('index.js')) {

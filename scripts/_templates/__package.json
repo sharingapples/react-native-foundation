@@ -7,6 +7,9 @@
     "android": "foundation run-android",
     "ios": "foundation run-ios"
   },
+  "dependencies": {
+
+  },
   "peerDependencies": {
     "react": "^{{ReactVersion}}",
     "react-native": "^{{ReactNativeVersion}}"

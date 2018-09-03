@@ -1,8 +1,9 @@
 const fs = require('fs');
 const path = require('path');
-const config = require(path.resolve('foundation.config.js'));
 
 module.exports = (pkg) => {
+  const config = require(path.resolve('foundation.config.js'));
+
   const res = {};
 
   res.appName = config.appName || 'Foundation Demo';
