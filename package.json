@@ -1,6 +1,6 @@
 {
   "name": "react-native-foundation",
-  "version": "0.2.4",
+  "version": "0.2.6",
   "scripts": {
     "test": "jest"
   },
@@ -21,6 +21,9 @@
   "jest": {
     "preset": "react-native"
   },
+  "license": "MIT",
+  "author": "Ranjan Shrestha <ranjan@sharingapples.com>",
+  "repository": "git@github.com:sharingapples/react-native-foundation.git",
   "keywords": [
     "foundation",
     "react-native"
