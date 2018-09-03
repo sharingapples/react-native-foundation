@@ -27,7 +27,11 @@ module.exports = async function (config, package) {
   const iosFolder = path.resolve(config.REACT_NATIVE_DIR, 'ios');
   const buildFolder = getBuildFolder(config);
 
-  const infoPlist = path.resolve(iosFolder, 'Foundation', 'Info.plist');
+  // Allow providing scheme name, for projects created
+  // with react-native
+  const scheme = config.ios.scheme || 'Foundation';
+
+  const infoPlist = path.resolve(iosFolder, scheme, 'Info.plist');
 
   try {
     // use PlistBuddy to make changes to Info.plist
@@ -46,7 +50,7 @@ module.exports = async function (config, package) {
       info: { version: 1, author: 'foundation' },
     };
 
-    const assetsFolder = path.resolve(iosFolder, 'Foundation', 'Images.xcassets', 'AppIcon.appiconset');
+    const assetsFolder = path.resolve(iosFolder, scheme, 'Images.xcassets', 'AppIcon.appiconset');
     appIcons.forEach(([type, sizes]) => {
       sizes.forEach((size) => {
         const [sz, scale] = size.split('@');
@@ -80,42 +84,52 @@ module.exports = async function (config, package) {
   }
 
   if (config.splashIcon) {
-    const assetsFolder = path.resolve(iosFolder, 'Foundation', 'Images.xcassets', 'Splash.imageset');
-
-    const ContentsJson = {
-      images: [],
-      info: { version: 1, author: 'foundation' },
-    };
-
-    ['1x', '2x', '3x'].forEach((scale) => {
-      const info = {
-        "idiom": "universal",
-        "scale": scale,
+    const assetsFolder = path.resolve(iosFolder, scheme, 'Images.xcassets', 'Splash.imageset');
+    // only create splash assets if its defined
+    if (fs.existsSync(assetsFolder)) {
+      const ContentsJson = {
+        images: [],
+        info: { version: 1, author: 'foundation' },
       };
-      ContentsJson.images.push(info);
 
-      const name = `ios-splash@${scale}.png`;
-      const src = path.resolve(config.splashIcon, name);
-      if (!fs.existsSync(src)) {
-        console.warn(`WARN::Splash icon not found for ios ios-splash@${scale}.png`);
-        return;
-      }
+      ['1x', '2x', '3x'].forEach((scale) => {
+        const info = {
+          "idiom": "universal",
+          "scale": scale,
+        };
+        ContentsJson.images.push(info);
 
-      const targetFile = path.resolve(assetsFolder, name);
-      if (fs.existsSync(targetFile)) {
-        fs.unlinkSync(targetFile);
-      }
+        const name = `ios-splash@${scale}.png`;
+        const src = path.resolve(config.splashIcon, name);
+        if (!fs.existsSync(src)) {
+          console.warn(`WARN::Splash icon not found for ios ios-splash@${scale}.png`);
+          return;
+        }
 
-      fs.copyFileSync(src, targetFile);
-      info.filename = name;
-    });
+        const targetFile = path.resolve(assetsFolder, name);
+        if (fs.existsSync(targetFile)) {
+          fs.unlinkSync(targetFile);
+        }
 
-    const contentFile = path.resolve(assetsFolder, 'Contents.json');
-    fs.writeFileSync(contentFile, JSON.stringify(ContentsJson, null, 2));
+        fs.copyFileSync(src, targetFile);
+        info.filename = name;
+      });
+
+      const contentFile = path.resolve(assetsFolder, 'Contents.json');
+      fs.writeFileSync(contentFile, JSON.stringify(ContentsJson, null, 2));
+    }
   }
 
   return new Promise((resolve, reject) => {
     // Perform a pod install
+
+    // only do a pod install if there is a Podfile
+    const podfile = path.resolve(iosFolder, 'Podfile');
+    if (!fs.existsSync(podfile)) {
+      console.log('Skipping pod install, since pod file is not found');
+      return resolve(true);
+    }
+
     console.log('POD::INSTALL');
     const podInstall = spawn('pod', ['install'], {
       cwd: path.resolve(iosFolder),

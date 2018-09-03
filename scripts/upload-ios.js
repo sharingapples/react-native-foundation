@@ -10,8 +10,10 @@ module.exports = async function (config) {
   const iosFolder = path.resolve(config.REACT_NATIVE_DIR, 'ios');
   const outputFolder = path.resolve(iosFolder, 'build');
 
+  const scheme = config.ios.scheme || 'Foundation';
+
   // See if there is an ipa file to upload
-  const ipaFile = path.resolve(outputFolder, 'Foundation.ipa');
+  const ipaFile = path.resolve(outputFolder, `${scheme}.ipa`);
   if (!fs.existsSync(ipaFile)) {
     console.log(`ios app not found '${ipaFile}'`);
     throw new Error('Looks like app archive has not been created yet. Run `release-ios` to generate the ios app archive. Also note that the ipa file is removed after it\'s successfully uploaded');
