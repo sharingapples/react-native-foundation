@@ -47,6 +47,13 @@ module.exports = function buildAndroid(config) {
       // Use the rectangle file as an alternate for round
       tryCopy(dpi, config.launcherIcon, 'ic_launcher_round', file);
     });
+
+    // Also copy the ic_launcher-web.png file required for play store
+    const web = 'ic_launcher-web.png';
+    const webFile = path.resolve(sourceFolder, web);
+    if (fs.existsSync(webFile)) {
+      fs.copyFileSync(webFile, path.resolve(androidFolder, 'app', 'src', 'main', web));
+    }
   }
 
   if (config.splashIcon) {
