@@ -105,8 +105,69 @@ to work.<br/>
    command might not work.
 5. `foundation run-android` should now build the android app
    as per `foundation.config.js` and `foundation release-android` should generate apk ready for publishing.
-   Note that the `run-android` command will only create the apk, but will not be able to start the Activity (TODO).
-6. The splash screen won't be available with these changes. It's however pretty easy, if you check how it works. Will document it later.
+   Note that the `run-android` command will only create the apk, but will not be able to start the Activity.
+### Including Splash Screen in Android
+  1. Create a background for splash in `android/app/src/main/res/drawable/splash_background.xml` with the following content. It defines a simple layer with a centered image.
+```xml
+<?xml version='1.0' encoding='utf-8'?>
+<layer-list xmlns:android='http://schemas.android.com/apk/res/android'>
+  <item android:drawable='@android:color/background_light' />
+  <item>
+    <bitmap
+      android:src='@mipmap/ic_splash'
+      android:gravity='center'
+    />
+  </item>
+</layer-list>
+```
+  2. Add image file named `ic_splash.png` in each of the `mipmap-mdpi`, `mimap-hdpi`, `mipmap-xhdpi`, `mipmap-xxhdpi` and `mipmap-xxxhdpi` with required sizes. This should also be taken care of by `run-android` command when you provide a `splash` configuration in `foundation.config.js`.
+
+  3. Define a SplashTheme in `android/app/src/res/values/styles.xml`. Add a new style within the `resources` tag.
+```xml
+  <style name="SplashTheme" parent="AppTheme">
+    <item name="android:windowBackground">@drawable/splash_background</item>
+    <item name="android:windowAnimationStyle">@null</item>
+  </style>
+```
+   4. Add a new Activity file along side `MainActivity` somewhere within `android/app/src/main/java/...`
+```java
+package <same as MainActivity>;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+
+public class SplashActivity extends AppCompatActivity {
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+
+    startActivity(new Intent(SplashActivity.this, MainActivity.class));
+
+    finish();
+  }
+}
+```
+   5. Update the `AndroidManifest.xml` to include the SplashActivity with an Intent to launch it on start and remove those Intents from `MainActivity` and set its background to `SplashTheme` as well. Your updated manifest should look like:
+```xml
+  .....
+  <activity
+    android:name=".SplashActivity"
+    android:theme="@style/SplashTheme">
+    <intent-filter>
+      <action android:name="android.intent.action.MAIN" />
+      <category android:name="android.intent.category.LAUNCHER" />
+    </intent-filter>
+  </activity>
+  <activity
+    android:name=".MainActivity"
+    android:theme="@style/SplashTheme"
+    android:label="@string/app_name"
+    android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+    android:windowSoftInputMode="adjustResize">
+  </activity>
+  .....
+```
 
 ### Configurations
 1. `appName`: The name of the app as displayed on your mobile
