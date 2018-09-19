@@ -50,7 +50,7 @@ module.exports = function buildAndroid(config) {
 
     // Also copy the ic_launcher-web.png file required for play store
     const web = 'ic_launcher-web.png';
-    const webFile = path.resolve(sourceFolder, web);
+    const webFile = path.resolve(androidFolder, 'app', 'src', 'main', web);
     if (fs.existsSync(webFile)) {
       fs.copyFileSync(webFile, path.resolve(androidFolder, 'app', 'src', 'main', web));
     }
