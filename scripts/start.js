@@ -22,7 +22,7 @@ module.exports = function (config) {
   }
 
   return [
-    '--projectRoots',
+    '--projectRoot',
     projectRoots.join(','),
   ].concat(extraConfig);
 };
